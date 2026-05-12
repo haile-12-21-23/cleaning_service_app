@@ -1,3 +1,5 @@
+import 'package:cleaning_service_app/core/routes/app_router.dart';
+import 'package:cleaning_service_app/core/theme/app_theme.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 
 import 'package:cleaning_service_app/features/auth/presentation/screens/login_screen.dart';
@@ -33,9 +35,11 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
 
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      home: authState.isAuthenticated ? ProfileScreen() : LoginScreen(),
+      theme: AppTheme.lightTheme,
+      routerConfig: AppRouter.router,
+      // home: authState.isAuthenticated ? ProfileScreen() : LoginScreen(),
     );
   }
 }

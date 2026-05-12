@@ -1,7 +1,9 @@
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
+import 'package:cleaning_service_app/features/auth/presentation/providers/auth_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -16,7 +18,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
-
+ref.listen<AuthState>(authControllerProvider, (previous, next) {
+      if (next.isAuthenticated) {
+        context.go('/profile');
+      }
+  
+});
     return Scaffold(
       appBar: AppBar(title: const Text("Login")),
       body: Padding(
