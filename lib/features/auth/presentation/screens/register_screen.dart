@@ -1,37 +1,40 @@
+import 'package:cleaning_service_app/core/widgets/app_dropdown.dart';
 import 'package:cleaning_service_app/core/widgets/app_text_field.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_state.dart';
-
+import 'package:cleaning_service_app/features/auth/presentation/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends ConsumerStatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _LoginScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   final formKey = GlobalKey<FormState>();
 
   final phoneNumberController = TextEditingController();
+  final nameController = TextEditingController();
   final passwordController = TextEditingController();
+  String? selectedRole;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final authState = ref.watch(authControllerProvider);
-ref.listen<AuthState>(authControllerProvider, (previous, next) {
+    ref.listen<AuthState>(authControllerProvider, (previous, next) {
       if (next.isAuthenticated) {
         context.go('/profile');
       }
-  
-});
+    });
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login", style: theme.textTheme.headlineMedium),
+        title: Text("Create Account", style: theme.textTheme.headlineMedium),
       ),
       body: Padding(
         padding: const EdgeInsetsGeometry.all(16),
@@ -39,21 +42,69 @@ ref.listen<AuthState>(authControllerProvider, (previous, next) {
           child: Form(
             key: formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   "Welcome to Cleaning Service!",
                   style: theme.textTheme.headlineMedium?.copyWith(fontSize: 24),
                 ),
-                const SizedBox(height: 128),
+                const SizedBox(height: 30),
+
+                ProfileAvatar(
+                  imageUrl: "",
+                  onEdit: () {
+                    print("Edit profile clicked");
+                  },
+                ),
+                const SizedBox(height: 30),
+
+                AppDropdown(
+                  label: "Register as:",
+                  items: const ["provider", "client"],
+                  value: selectedRole,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedRole = value;
+                    });
+                    formKey.currentState?.validate();
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please select role";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
             
-                     
+                AppTextField(
+                  controller: nameController,
+                  label: " Full Name",
+                  obSecureText: false,
+                  keyboardType: TextInputType.name,
+
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Name is required";
+                    }
+                    if (value.trim().length < 5) {
+                      return "Name must be al least 5 characters";
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    formKey.currentState?.validate();
+                  },
+                ),
+              
+                const SizedBox(height: 16),
+            
+              
                 AppTextField(
                   controller: phoneNumberController,
                   label: "Phone Number",
                   obSecureText: false,
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Phone number is required.";
@@ -63,12 +114,12 @@ ref.listen<AuthState>(authControllerProvider, (previous, next) {
                     }
                     return null;
                   },
-                  onChanged: (p0) {
+                  onChanged: (value) {
                     formKey.currentState?.validate();
                   },
                 ),
                 const SizedBox(height: 16),
-               
+            
                 AppTextField(
                   controller: passwordController,
                   label: "Password",
@@ -78,13 +129,16 @@ ref.listen<AuthState>(authControllerProvider, (previous, next) {
                     if (value == null || value.isEmpty) {
                       return "Password is required.";
                     }
+                    if (value.trim().length < 6) {
+                      return "Password is too short.";
+                    }
                     return null;
                   },
-                  onChanged: (p0) {
+                  onChanged: (value) {
                     formKey.currentState?.validate();
                   },
                 ),
-
+               
                 if (authState.error != null)
                   Text(
                     authState.error!,
@@ -100,26 +154,28 @@ ref.listen<AuthState>(authControllerProvider, (previous, next) {
                           }
                           await ref
                               .read(authControllerProvider.notifier)
-                              .login(
+                              .register(
+                                nameController.text.trim(),
+                                selectedRole ?? '',
+                                "default.png",
                                 phoneNumberController.text.trim(),
                                 passwordController.text.trim(),
                               );
                         },
                   child: authState.isLoading
                       ? CircularProgressIndicator()
-                      : const Text("Login"),
+                      : const Text("Register"),
                 ),
                 const SizedBox(height: 12),
 
                 Row(
                   children: [
-                    Text("Do't have an account?"),
+                    Text("Already have an account?"),
                     TextButton(
                       onPressed: () {
-                        context.go('/register');
-                        print("clicking.......");
+                        context.go('/login');
                       },
-                      child: Text("Register here"),
+                      child: Text("login here"),
                     ),
                   ],
                 ),

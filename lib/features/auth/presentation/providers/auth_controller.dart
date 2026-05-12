@@ -3,6 +3,7 @@ import 'package:cleaning_service_app/core/providers.dart';
 import 'package:cleaning_service_app/core/storage/auth_local_data_source.dart';
 import 'package:cleaning_service_app/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:cleaning_service_app/features/auth/data/models/login_request.dart';
+import 'package:cleaning_service_app/features/auth/data/models/register_request.dart';
 import 'package:cleaning_service_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,12 +29,21 @@ class AuthController extends StateNotifier<AuthState> {
   final AuthLocalDataSource local;
 
   AuthController(this.repository, this.local)
-    : super(AuthState(isAuthenticated: false, isLoading: false));
+    : super(
+        AuthState(
+          isAuthenticated: false,
+          isLoading: false,
+          isInitialized: false,
+        ),
+      ) {
+    checkAuth();
+  }
 
   Future<void> checkAuth() async {
     final token = await local.readToken();
+    
 
-    state = state.copyWith(isAuthenticated: token != null);
+    state = state.copyWith(isAuthenticated: token != null, isInitialized: true);
   }
 
   Future<void> login(String phone, String password) async {
@@ -44,9 +54,46 @@ class AuthController extends StateNotifier<AuthState> {
         LoginRequest(phone: phone, password: password),
       );
 
+
       await local.saveToken(response.accessToken);
 
-      state = state.copyWith(isAuthenticated: true, isLoading: false);
+
+      state = state.copyWith(
+        isAuthenticated: true,
+        isLoading: false,
+        isInitialized: true,
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+  Future<void> register(
+    String name,
+    String role,
+    String profile,
+    String phone,
+    String password,
+  ) async {
+    try {
+      state = state.copyWith(isLoading: true, error: null);
+
+      final response = await repository.register(
+        RegisterRequest(
+          name: name,
+          role: role,
+          profile: profile,
+          phone: phone,
+          password: password,
+        ),
+      );
+
+      await local.saveToken(response.accessToken);
+
+      state = state.copyWith(
+        isAuthenticated: true,
+        isLoading: false,
+        isInitialized: true,
+      );
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
@@ -62,6 +109,8 @@ class AuthController extends StateNotifier<AuthState> {
         isAuthenticated: false,
         loggedOut: true,
         isLoading: false,
+        isInitialized: false,
+
       );
     } catch (e, st) {
       state = state.copyWith(isLoading: false, error: e.toString());
