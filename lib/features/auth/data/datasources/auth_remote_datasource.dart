@@ -12,8 +12,7 @@ class AuthRemoteDatasource {
   Future<TokenResponse> login(LoginRequest request) async {
     try {
       final response = await dio.post('/auth/login', data: request.toJson());
-      print("Data:");
-      print(response.data);
+   
 
       // Success
       if (response.statusCode == 200) {

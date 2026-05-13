@@ -5,7 +5,7 @@ import 'package:cleaning_service_app/features/auth/presentation/screens/register
 import 'package:cleaning_service_app/features/booking/presentation/booking_screen.dart';
 import 'package:cleaning_service_app/features/chat/presentation/chat_screen.dart';
 import 'package:cleaning_service_app/features/profile/screens/profile_screen.dart';
-import 'package:cleaning_service_app/features/services/presentation/service_screen.dart';
+import 'package:cleaning_service_app/features/services/presentation/screens/service_screen.dart';
 import 'package:cleaning_service_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
