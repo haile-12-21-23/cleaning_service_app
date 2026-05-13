@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/widgets/app_snackbar.dart';
 import 'package:cleaning_service_app/core/widgets/app_text_field.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_state.dart';
@@ -26,6 +27,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 ref.listen<AuthState>(authControllerProvider, (previous, next) {
       if (next.isAuthenticated) {
         context.go('/profile');
+      }
+      else if (next.error != null) {
+        showCustomSnackBar(message: next.error!, isSuccess: false);
       }
   
 });
@@ -85,11 +89,11 @@ ref.listen<AuthState>(authControllerProvider, (previous, next) {
                   },
                 ),
 
-                if (authState.error != null)
-                  Text(
-                    authState.error!,
-                    style: const TextStyle(color: Colors.red),
-                  ),
+                // if (authState.error != null)
+                // Text(
+                //   authState.error!,
+                //   style: const TextStyle(color: Colors.red),
+                // ),
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: authState.isLoading

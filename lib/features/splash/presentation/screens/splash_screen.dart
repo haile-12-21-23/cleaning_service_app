@@ -1,4 +1,5 @@
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +28,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     if (authState.isAuthenticated) {
       context.go("/home");
-    } else {
+    } else if (authState.error == null || authState.error!.isEmpty) {
+      print("Routing........");
       context.go("/login");
     }
   }

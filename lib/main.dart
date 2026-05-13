@@ -1,13 +1,22 @@
 import 'package:cleaning_service_app/core/routes/app_router.dart';
 import 'package:cleaning_service_app/core/theme/app_theme.dart';
+import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const ProviderScope(child: MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final container = ProviderContainer();
+
+  await container.read(authControllerProvider.notifier).checkAuth();
+
+  runApp(UncontrolledProviderScope(container: container, child: const MyApp()));
 }
 
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
@@ -29,6 +38,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       routerConfig: router,
+      scaffoldMessengerKey: rootScaffoldMessengerKey,
+
       // home: authState.isAuthenticated ? ProfileScreen() : LoginScreen(),
     );
   }

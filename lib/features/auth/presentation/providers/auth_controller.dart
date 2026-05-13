@@ -42,8 +42,12 @@ class AuthController extends StateNotifier<AuthState> {
   Future<void> checkAuth() async {
     final token = await local.readToken();
     
+    print("TOKEN FROM STORAGE: '$token'");
+    final loggedIn = token != null && token.isNotEmpty;
 
-    state = state.copyWith(isAuthenticated: token != null, isInitialized: true);
+    state = state.copyWith(isAuthenticated: loggedIn, isInitialized: true);
+    print("AUTH STATE: ${state.isAuthenticated}");
+
   }
 
   Future<void> login(String phone, String password) async {
@@ -53,8 +57,8 @@ class AuthController extends StateNotifier<AuthState> {
       final response = await repository.login(
         LoginRequest(phone: phone, password: password),
       );
-
-
+print("TOKEN:");
+      print(response.accessToken);
       await local.saveToken(response.accessToken);
 
 

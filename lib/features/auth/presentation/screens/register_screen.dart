@@ -175,7 +175,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       onPressed: () {
                         context.go('/login');
                       },
-                      child: Text("login here"),
+                      child: Text("Login here"),
                     ),
                   ],
                 ),

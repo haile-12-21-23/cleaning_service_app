@@ -8,8 +8,11 @@ class AuthRepositoryImpl {
 
   AuthRepositoryImpl(this.remote);
 
-  Future<TokenResponse> login(LoginRequest request) {
-    return remote.login(request);
+  Future<TokenResponse> login(LoginRequest request) async {
+    final response = await remote.login(request);
+    print("Response in Repo:$response");
+    return response;
+
   }
   Future<TokenResponse> register(RegisterRequest request) {
     return remote.register(request);
