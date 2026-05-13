@@ -5,6 +5,8 @@ import 'package:cleaning_service_app/features/auth/presentation/screens/register
 import 'package:cleaning_service_app/features/booking/presentation/booking_screen.dart';
 import 'package:cleaning_service_app/features/chat/presentation/chat_screen.dart';
 import 'package:cleaning_service_app/features/profile/screens/profile_screen.dart';
+import 'package:cleaning_service_app/features/services/presentation/screens/create_service_screen.dart';
+import 'package:cleaning_service_app/features/services/presentation/screens/service_detail_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/service_screen.dart';
 import 'package:cleaning_service_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,6 +74,20 @@ final routerProvider = Provider<GoRouter>((ref) {
       // GoRoute(
       //   path: "/profile",
       //   builder: (_, _) => const ProfileScreen()),
+
+      GoRoute(
+        path: '/service/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return ServiceDetailScreen(serviceId: id);
+        },
+      ),
+      GoRoute(
+        path: "/create-service",
+        builder: (context, state) {
+          return const CreateServiceScreen();
+        },
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MainNavigationScreen(navigationShell: navigationShell);

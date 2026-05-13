@@ -2,6 +2,7 @@ import 'package:cleaning_service_app/features/services/presentation/providers/se
 import 'package:cleaning_service_app/features/services/presentation/widgets/service_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ServiceScreen extends ConsumerStatefulWidget {
   const ServiceScreen({super.key});
@@ -35,6 +36,12 @@ class _ServiceScreenState extends ConsumerState<ServiceScreen> {
         loading: () {
           return Center(child: CircularProgressIndicator());
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.push("/create-service");
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
