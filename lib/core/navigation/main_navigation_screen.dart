@@ -41,19 +41,34 @@ class MainNavigationScreen extends StatelessWidget {
         surfaceTintColor: theme.colorScheme.secondary,
         destinations: [
           NavigationDestination(
-            icon: Icon(Icons.cleaning_services),
+            icon: Icon(Icons.cleaning_services_outlined),
             selectedIcon: Icon(
-              Icons.cleaning_services,
+              Icons.cleaning_services_rounded,
               color: theme.colorScheme.primary,
             ),
             label: 'Services',
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month),
+            icon: Icon(Icons.calendar_month_outlined),
             label: 'Booking',
+            selectedIcon: Icon(
+              Icons.calendar_month_rounded,
+              color: theme.colorScheme.primary,
+            ),
           ),
-          NavigationDestination(icon: Icon(Icons.chat), label: 'Chats'),
-          NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
+          NavigationDestination(
+            icon: Icon(Icons.messenger_outline),
+            label: 'Chats',
+            selectedIcon: Icon(
+              Icons.message_outlined,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            label: 'Profile',
+            selectedIcon: Icon(Icons.person, color: theme.colorScheme.primary),
+          ),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/core/widgets/app_snackbar.dart';
 import 'package:cleaning_service_app/core/widgets/app_text_field.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
@@ -34,9 +35,10 @@ ref.listen<AuthState>(authControllerProvider, (previous, next) {
   
 });
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login", style: theme.textTheme.headlineMedium),
-      ),
+      appBar: AppAppBar(title: "Login") as PreferredSizeWidget,
+      //  AppBar(
+      //   title: Text("Login", style: theme.textTheme.headlineMedium),
+      // ),
       body: Padding(
         padding: const EdgeInsetsGeometry.all(16),
         child: SingleChildScrollView(

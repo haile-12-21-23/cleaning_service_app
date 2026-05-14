@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/features/services/presentation/providers/service_provider.dart';
 import 'package:cleaning_service_app/features/services/presentation/widgets/service_card.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class _ServiceScreenState extends ConsumerState<ServiceScreen> {
   Widget build(BuildContext context) {
     final serviceAsync = ref.watch(servicesProvider);
     return Scaffold(
-      appBar: AppBar(title: Text('Services')),
+      appBar: AppAppBar(title: "Services"),
       body: serviceAsync.when(
         data: (services) {
           if (services.isEmpty) {

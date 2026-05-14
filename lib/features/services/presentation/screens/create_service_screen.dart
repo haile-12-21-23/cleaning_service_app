@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/core/widgets/app_dropdown.dart';
 import 'package:cleaning_service_app/core/widgets/app_snackbar.dart';
 import 'package:cleaning_service_app/core/widgets/app_text_field.dart';
@@ -41,7 +42,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
       );
     });
     return Scaffold(
-      appBar: AppBar(title: Text("Create Service")),
+      appBar: AppAppBar(title: "Create Service"),
       body: Form(
         key: formKey,
         child: ListView(

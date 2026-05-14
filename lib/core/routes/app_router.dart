@@ -2,7 +2,7 @@ import 'package:cleaning_service_app/core/navigation/main_navigation_screen.dart
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:cleaning_service_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:cleaning_service_app/features/auth/presentation/screens/register_screen.dart';
-import 'package:cleaning_service_app/features/booking/presentation/booking_screen.dart';
+import 'package:cleaning_service_app/features/booking/presentation/screens/booking_screen.dart';
 import 'package:cleaning_service_app/features/chat/presentation/chat_screen.dart';
 import 'package:cleaning_service_app/features/profile/screens/profile_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/create_service_screen.dart';

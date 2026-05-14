@@ -1,18 +1,21 @@
+import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
+import 'package:cleaning_service_app/features/booking/data/models/create_booking_request.dart';
+import 'package:cleaning_service_app/features/booking/presentation/providers/booking_provider.dart';
+
 import 'package:cleaning_service_app/features/services/presentation/providers/service_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ServiceDetailScreen extends ConsumerWidget {
   final String serviceId;
-  ServiceDetailScreen({super.key, required this.serviceId});
+  const ServiceDetailScreen({super.key, required this.serviceId});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final serviceAsync = ref.watch(serviceDetailsProvider(serviceId));
 
     return Scaffold(
-      appBar: AppBar(title: Text("Service Details")),
+      appBar: AppAppBar(title: "Service Details"),
       body: serviceAsync.when(
         data: (service) {
           return Padding(
@@ -44,7 +47,17 @@ class ServiceDetailScreen extends ConsumerWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await ref
+                          .read(createBookingProvider.notifier)
+                          .createBooking(
+                            CreateBookingRequest(
+                              serviceId: serviceId,
+                              providerId: service
+                                  .id, //TODO: Will change to provider id.
+                            ),
+                          );
+                    },
                     child: Text("Book Service"),
                   ),
                 ),

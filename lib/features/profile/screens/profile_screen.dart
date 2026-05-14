@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +17,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
     ref.listen<AuthState>(authControllerProvider, (prev, next) {
-      print("next:${next.loggedOut}");
       if (next.loggedOut) {
         context.go('/login');
-        print("Routing");
       }
     });
     return Scaffold(
-      appBar: AppBar(title: Text("Profile")),
+      appBar: AppAppBar(title: "Profile"),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
