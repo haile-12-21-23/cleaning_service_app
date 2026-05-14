@@ -4,7 +4,7 @@ import 'package:cleaning_service_app/features/auth/presentation/screens/login_sc
 import 'package:cleaning_service_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:cleaning_service_app/features/booking/presentation/screens/booking_screen.dart';
 import 'package:cleaning_service_app/features/chat/presentation/chat_screen.dart';
-import 'package:cleaning_service_app/features/profile/screens/profile_screen.dart';
+import 'package:cleaning_service_app/features/profile/presentation/screens/profile_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/create_service_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/service_detail_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/service_screen.dart';
@@ -103,7 +103,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           // Booking
           StatefulShellBranch(
             routes: [
-              GoRoute(path: "/booking", builder: (_, _) => BookingScreen()),
+              GoRoute(path: "/bookings", builder: (_, _) => BookingScreen()),
             ],
           ),
           // Chat

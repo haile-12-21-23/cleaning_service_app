@@ -7,6 +7,7 @@ class BookingScreen extends ConsumerWidget {
   const BookingScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final bookingAsync = ref.watch(myBookingsProvider);
     return Scaffold(
       appBar: AppAppBar(title: "Booking"),
@@ -19,10 +20,18 @@ class BookingScreen extends ConsumerWidget {
           return ListView.separated(
             itemBuilder: (context, index) {
               final booking = bookings[index];
-              return ListTile(
-                title: Text(booking.service.title),
-                subtitle: Text(booking.service.description),
-                trailing: Text(booking.status),
+              return Card(
+                elevation: 3,
+                child: ListTile(
+                  title: Text(booking.service.title),
+                  subtitle: Text(booking.service.description),
+                  trailing: Text(
+                    booking.status,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.secondary,
+                    ),
+                  ),
+                ),
               );
             },
             separatorBuilder: (context, _) => const SizedBox(height: 8),
