@@ -5,7 +5,7 @@ import 'package:cleaning_service_app/features/auth/presentation/screens/register
 import 'package:cleaning_service_app/features/booking/data/models/booking_model.dart';
 import 'package:cleaning_service_app/features/booking/presentation/screens/booking_detail_screen.dart';
 import 'package:cleaning_service_app/features/booking/presentation/screens/booking_screen.dart';
-import 'package:cleaning_service_app/features/chat/presentation/chat_screen.dart';
+import 'package:cleaning_service_app/features/chat/presentation/screens/chat_screen.dart';
 import 'package:cleaning_service_app/features/profile/presentation/screens/profile_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/create_service_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/service_detail_screen.dart';
