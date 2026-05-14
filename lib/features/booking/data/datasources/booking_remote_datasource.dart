@@ -33,7 +33,7 @@ class BookingRemoteDatasource {
   Future<List<BookingModel>> getMyBookings({int limit = 10}) async {
     try {
       final response = await dio.get(
-        "/bookings/getAllBooking?limit?=$limit",
+        "/bookings/getUserBooking",
       ); //path will change to bookings/me
       if (response.statusCode == 200) {
         final bookingData = response.data as List;

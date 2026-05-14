@@ -2,6 +2,8 @@ import 'package:cleaning_service_app/core/navigation/main_navigation_screen.dart
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:cleaning_service_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:cleaning_service_app/features/auth/presentation/screens/register_screen.dart';
+import 'package:cleaning_service_app/features/booking/data/models/booking_model.dart';
+import 'package:cleaning_service_app/features/booking/presentation/screens/booking_detail_screen.dart';
 import 'package:cleaning_service_app/features/booking/presentation/screens/booking_screen.dart';
 import 'package:cleaning_service_app/features/chat/presentation/chat_screen.dart';
 import 'package:cleaning_service_app/features/profile/presentation/screens/profile_screen.dart';
@@ -86,6 +88,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: "/create-service",
         builder: (context, state) {
           return const CreateServiceScreen();
+        },
+      ),
+      GoRoute(
+        path: "/booking-details",
+        builder: (context, state) {
+          final BookingModel booking = state.extra as BookingModel;
+          return BookingDetailScreen(booking: booking);
         },
       ),
       StatefulShellRoute.indexedStack(

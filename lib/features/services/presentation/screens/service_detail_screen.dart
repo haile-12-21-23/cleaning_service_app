@@ -1,10 +1,12 @@
 import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
+import 'package:cleaning_service_app/core/widgets/app_snackbar.dart';
 import 'package:cleaning_service_app/features/booking/data/models/create_booking_request.dart';
 import 'package:cleaning_service_app/features/booking/presentation/providers/booking_provider.dart';
 
 import 'package:cleaning_service_app/features/services/presentation/providers/service_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ServiceDetailScreen extends ConsumerWidget {
   final String serviceId;
@@ -13,6 +15,21 @@ class ServiceDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final serviceAsync = ref.watch(serviceDetailsProvider(serviceId));
+
+    ref.listen(createBookingProvider, (prev, next) {
+      next.whenOrNull(
+        data: (_) {
+          showCustomSnackBar(
+            message: 'Booking created successfully.',
+            isSuccess: true,
+          );
+          context.pop();
+        },
+        error: (e, _) {
+          showCustomSnackBar(message: e.toString(), isSuccess: false);
+        },
+      );
+    });
 
     return Scaffold(
       appBar: AppAppBar(title: "Service Details"),
@@ -53,8 +70,7 @@ class ServiceDetailScreen extends ConsumerWidget {
                           .createBooking(
                             CreateBookingRequest(
                               serviceId: serviceId,
-                              providerId: service
-                                  .id, //TODO: Will change to provider id.
+                              providerId: service.provider.id, 
                             ),
                           );
                     },

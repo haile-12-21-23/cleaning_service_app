@@ -2,6 +2,7 @@ import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/features/booking/presentation/providers/booking_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class BookingScreen extends ConsumerWidget {
   const BookingScreen({super.key});
@@ -31,6 +32,9 @@ class BookingScreen extends ConsumerWidget {
                       color: theme.colorScheme.secondary,
                     ),
                   ),
+                  onTap: () {
+                    context.push("/booking-details", extra: booking);
+                  },
                 ),
               );
             },

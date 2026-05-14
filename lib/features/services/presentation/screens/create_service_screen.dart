@@ -6,6 +6,7 @@ import 'package:cleaning_service_app/features/services/data/models/create_servic
 import 'package:cleaning_service_app/features/services/presentation/providers/service_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateServiceScreen extends ConsumerStatefulWidget {
   const CreateServiceScreen({super.key});
@@ -35,6 +36,8 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
             message: 'Service created successfully.',
             isSuccess: true,
           );
+          context.pop();
+
         },
         error: (e, _) {
           showCustomSnackBar(message: e.toString(), isSuccess: false);
