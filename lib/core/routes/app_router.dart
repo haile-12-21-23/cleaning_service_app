@@ -5,7 +5,9 @@ import 'package:cleaning_service_app/features/auth/presentation/screens/register
 import 'package:cleaning_service_app/features/booking/data/models/booking_model.dart';
 import 'package:cleaning_service_app/features/booking/presentation/screens/booking_detail_screen.dart';
 import 'package:cleaning_service_app/features/booking/presentation/screens/booking_screen.dart';
+import 'package:cleaning_service_app/features/chat/data/models/conversation_model.dart';
 import 'package:cleaning_service_app/features/chat/presentation/screens/chat_screen.dart';
+import 'package:cleaning_service_app/features/chat/presentation/screens/conversation_screen.dart';
 import 'package:cleaning_service_app/features/profile/presentation/screens/profile_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/create_service_screen.dart';
 import 'package:cleaning_service_app/features/services/presentation/screens/service_detail_screen.dart';
@@ -97,6 +99,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           return BookingDetailScreen(booking: booking);
         },
       ),
+      GoRoute(
+        path: "/chat",
+        builder: (context, state) {
+          final conversation = state.extra as ConversationModel;
+          // final String currentUserId = state.extra as String;
+          return ChatScreen(conversation: conversation);
+        },
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MainNavigationScreen(navigationShell: navigationShell);
@@ -117,7 +127,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           // Chat
           StatefulShellBranch(
-            routes: [GoRoute(path: "/chat", builder: (_, _) => ChatScreen())],
+            routes: [
+              GoRoute(
+                path: "/conversation",
+                builder: (_, _) => ConversationScreen(),
+              ),
+            ],
           ),
           // Profile
           StatefulShellBranch(

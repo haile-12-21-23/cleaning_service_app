@@ -11,9 +11,10 @@ class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final theme = Theme.of(context);
     final profileAsync = ref.watch(myProfileProvider);
-
+   
     return Scaffold(
       appBar: AppAppBar(title: "Profile"),
       body: profileAsync.when(
@@ -154,7 +155,22 @@ class ProfileScreen extends ConsumerWidget {
           );
         },
         error: (error, _) {
-          return Center(child: Text(error.toString()));
+          return Center(
+            child: Column(
+              children: [
+                Text(error.toString()),
+
+                ElevatedButton(
+                  onPressed: () async {
+                    await ref.read(authControllerProvider.notifier).logout();
+                    context.go("/login");
+                    print("Logout......");
+                  },
+                  child: Text('data'),
+                ),
+              ],
+            ),
+          );
         },
         loading: () {
           return Center(child: CircularProgressIndicator());
