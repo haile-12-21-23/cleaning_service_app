@@ -24,7 +24,15 @@ class ChatControllerNotifier extends StateNotifier<List<ChatMessageModel>> {
     });
   }
 
-  void sendMessage(String senderId, String content) {
-    socket.sendMessage(senderId: senderId, content: content);
+  void sendMessage({
+    required String senderId,
+    required String receiverId,
+    required String content,
+  }) {
+    socket.sendMessage(
+      senderId: senderId,
+      receiverId: receiverId,
+      content: content,
+    );
   }
 }

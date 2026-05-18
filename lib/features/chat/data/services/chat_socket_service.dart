@@ -21,23 +21,36 @@ class ChatSocketService {
 
     _channel!.stream.listen(
       (event) {
+        print("WS EVENT: $event");
+
         final data = jsonDecode(event);
+        print("WS DECODED: $data");
         _messageController.add(data);
       },
       onError: (error) {
         _messageController.addError(error);
+        print("WS ERROR: $error");
       },
       onDone: () {
         disconnect();
+        print("WS CLOSED");
       },
     );
   }
 
-  void sendMessage({required String senderId, required String content}) {
+  void sendMessage({
+    required String senderId,
+    required String receiverId,
+    required String content,
+  }) {
     if (_channel == null) {
       return;
     }
-    final payload = jsonEncode({"sender_id": senderId, "content": content});
+    final payload = jsonEncode({
+      "sender_id": senderId,
+      "receiver_id": receiverId,
+      "content": content,
+    });
     _channel!.sink.add(payload);
   }
 

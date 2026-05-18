@@ -1,5 +1,6 @@
 import 'package:cleaning_service_app/core/errors/app_excetion.dart';
 import 'package:cleaning_service_app/features/chat/data/models/conversation_model.dart';
+import 'package:cleaning_service_app/features/chat/data/models/message_model.dart';
 import 'package:dio/dio.dart';
 
 class ChatRemoteDatasource {
@@ -20,6 +21,38 @@ class ChatRemoteDatasource {
       throw AppException(
         response.data["detail"] ?? "Failed to load conversations",
       );
+    } on DioException catch (e) {
+      // Backend response exists
+      if (e.response != null) {
+        final data = e.response?.data;
+
+        if (data is Map<String, dynamic>) {
+          throw AppException(
+            data["detail"] ?? data["message"] ?? "Something went wrong",
+          );
+        }
+      }
+
+      // Network errors
+      throw AppException("Unable to connect to server");
+    } catch (e, st) {
+      print("St:$st");
+      throw AppException(e.toString());
+    }
+  }
+
+  Future<List<MessageModel>> getMessages(String userId) async {
+    try {
+      final response = await dio.get('/message/$userId');
+      print("messageData:${response.data}");
+
+      if (response.statusCode == 200) {
+        final messageData = response.data as List;
+        return messageData.map((message) {
+          return MessageModel.fromJson(message);
+        }).toList();
+      }
+      throw AppException(response.data["detail"] ?? "Failed to load messages");
     } on DioException catch (e) {
       // Backend response exists
       if (e.response != null) {

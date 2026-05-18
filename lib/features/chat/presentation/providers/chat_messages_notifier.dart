@@ -1,8 +1,8 @@
-import 'package:chatview/chatview.dart';
+import 'package:cleaning_service_app/features/chat/data/models/chat_message_model.dart';
 import 'package:cleaning_service_app/features/chat/data/services/chat_socket_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatMessagesNotifier extends StateNotifier<List<Message>> {
+class ChatMessagesNotifier extends StateNotifier<List<ChatMessageModel>> {
   final ChatSocketService socket;
   final String conversationId;
 
@@ -12,17 +12,17 @@ class ChatMessagesNotifier extends StateNotifier<List<Message>> {
   void _init() {
     socket.connect(conversationId: conversationId);
     socket.messageStream.listen((data) {
-      final msg = Message(
+      final msg = ChatMessageModel(
         id: data['id'],
-        message: data['content'],
-        createdAt: data['created_at'],
-        sentBy: data['sender_id'],
+        content: data['content'],
+        createdAt: DateTime.parse(data['created_at']),
+        senderId: data['sender_id'],
       );
       state = [...state, msg];
     });
   }
 
-  void addLocalMessage(Message message) {
+  void addLocalMessage(ChatMessageModel message) {
     state = [...state, message];
   }
 }
