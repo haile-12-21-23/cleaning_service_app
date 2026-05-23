@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cleaning_service_app/features/services/data/models/service_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +28,16 @@ class ServiceCard extends StatelessWidget {
                   color: theme.colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(Icons.cleaning_services),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: service.serviceImage,
+                    fit: BoxFit.cover,
+                    errorWidget: (_, _, _) {
+                      return Icon(Icons.cleaning_services);
+                    },
+                  ),
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(

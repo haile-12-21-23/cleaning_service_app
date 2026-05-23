@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cleaning_service_app/core/utils/app_date_formatter.dart';
 import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/features/booking/data/models/booking_model.dart';
 import 'package:cleaning_service_app/features/profile/data/models/user_model.dart';
@@ -33,7 +35,10 @@ class BookingDetailScreen extends ConsumerWidget {
                         children: [
                           Text(
                             "Booking Status",
-                            style: theme.textTheme.titleSmall,
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Container(
@@ -69,9 +74,29 @@ class BookingDetailScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    height: 220,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: theme.colorScheme.primaryContainer,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: CachedNetworkImage(
+                        imageUrl: booking.service.serviceImage,
+                        fit: BoxFit.cover,
+                        errorWidget: (_, _, _) =>
+                            const Icon(Icons.cleaning_services, size: 80),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     booking.service.title,
-                    style: theme.textTheme.titleSmall,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 12),
 
@@ -105,12 +130,13 @@ class BookingDetailScreen extends ConsumerWidget {
               title: "Booking Information",
               child: Column(
                 children: [
-                  _InfoTitle(label: "Booking Id", value: booking.id),
+                  // _InfoTitle(label: "Booking Id", value: booking.id),
                   _InfoTitle(
                     label: "Booked At",
-                    value: booking.createdAt.split("T").first,
+                    value: AppDateFormatter.shortDate(booking.createdAt),
+                    //  booking.createdAt.split("T").first,
                   ),
-                  _InfoTitle(label: "Service ID", value: booking.service.id),
+                  // _InfoTitle(label: "Service ID", value: booking.service.id),
                 ],
               ),
             ),
@@ -151,7 +177,12 @@ class _SectionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: theme.textTheme.bodyLarge),
+            Text(
+              title,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 16),
             child,
           ],
@@ -173,13 +204,28 @@ class _UserCard extends StatelessWidget {
       title: title,
       child: Row(
         children: [
-          const CircleAvatar(radius: 28, child: Icon(Icons.person)),
+          CircleAvatar(
+            radius: 28,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: CachedNetworkImage(
+                imageUrl: user.profile,
+                fit: BoxFit.cover,
+                errorWidget: (_, _, _) => Icon(Icons.person),
+              ),
+            ),
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(user.name, style: theme.textTheme.titleSmall),
+                Text(
+                  user.name,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 6),
                 Text(user.phone),
                 const SizedBox(height: 6),

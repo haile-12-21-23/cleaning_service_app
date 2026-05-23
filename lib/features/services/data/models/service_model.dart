@@ -5,12 +5,14 @@ class ServiceModel {
   final String title;
   final String description;
   final double price;
+  final String serviceImage;
   final UserModel provider;
   ServiceModel({
     required this.id,
     required this.title,
     required this.description,
     required this.price,
+    required this.serviceImage,
     required this.provider,
   });
 
@@ -20,6 +22,7 @@ class ServiceModel {
       title: json['title'],
       description: json['description'],
       price: json['price'],
+      serviceImage: json['service_image'],
       provider: UserModel.fromJson(json['provider'])
     );
   }

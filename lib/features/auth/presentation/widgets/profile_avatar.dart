@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cleaning_service_app/features/profile/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class ProfileAvatar extends StatelessWidget {
-  final String? imageUrl;
+  final UserModel? user;
   final VoidCallback onEdit;
 
-  const ProfileAvatar({super.key, this.imageUrl, required this.onEdit});
+  const ProfileAvatar({super.key, this.user, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +22,18 @@ class ProfileAvatar extends StatelessWidget {
             ),
             child: CircleAvatar(
               radius: 55,
-              backgroundColor: Colors.grey.shade200,
-              child: CachedNetworkImage(
-                imageUrl: imageUrl!,
-                errorWidget: (context, url, error) {
-                  return const Icon(Icons.person, size: 55, color: Colors.grey);
-                },
+              // backgroundColor: Colors.grey.shade200,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(55),
+                child: CachedNetworkImage(
+                  imageUrl: user?.profile ?? '',
+                  errorWidget: (context, url, error) {
+                    return Text(
+                      user?.name[0].toUpperCase() ?? '',
+                      style: TextStyle(fontSize: 48),
+                    );
+                  },
+                ),
               ),
             ),
           ),

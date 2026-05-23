@@ -50,7 +50,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 const SizedBox(height: 30),
 
                 ProfileAvatar(
-                  imageUrl: "",
                   onEdit: () {
                     print("Edit profile clicked");
                   },

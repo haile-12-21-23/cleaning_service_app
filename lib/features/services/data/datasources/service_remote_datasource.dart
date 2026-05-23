@@ -52,7 +52,20 @@ class ServiceRemoteDatasource {
 
   Future<void> createService(CreateServiceRequest request) async {
     try {
-      await dio.post("/services/createService", data: request.toJson());
+      print("request:${request.toJson()}");
+      final formData = FormData.fromMap({
+        "title": request.title,
+        "description": request.description,
+        "price": request.price,
+
+        "file": await MultipartFile.fromFile(
+          request.serviceImage.path,
+          filename: request.serviceImage.path.split('/').last,
+        ),
+      });
+      print("formData:${formData.fields}");
+
+      await dio.post("/services/createService", data: formData);
     } on DioException catch (e) {
       // Backend response exists
       if (e.response != null) {
@@ -67,7 +80,9 @@ class ServiceRemoteDatasource {
 
       // Network errors
       throw AppException("Unable to connect to server");
-    } catch (e) {
+    } catch (e, st) {
+      print("stacktrace:$st");
+      print("error:$e");
       throw AppException(e.toString());
     }
   }

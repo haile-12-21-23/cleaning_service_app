@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cleaning_service_app/core/utils/app_image_picker.dart';
 import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/core/widgets/app_dropdown.dart';
 import 'package:cleaning_service_app/core/widgets/app_snackbar.dart';
@@ -20,6 +23,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final priceController = TextEditingController();
+  File? pickedImage;
 
   final formKey = GlobalKey<FormState>();
   String category = "Home";
@@ -31,7 +35,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
     final state = ref.watch(createServiceProvider);
     ref.listen(createServiceProvider, (prev, next) {
       next.whenOrNull(
-        data: (_) {
+        data: (data) {
           showCustomSnackBar(
             message: 'Service created successfully.',
             isSuccess: true,
@@ -70,6 +74,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
             AppTextField(
               controller: descriptionController,
               label: "Description",
+              maxLines: 5,
               obSecureText: false,
               keyboardType: TextInputType.text,
               validator: (value) {
@@ -114,6 +119,18 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
                 return null;
               },
             ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () async {
+                final image = await ImagePickerUtil.showImagePicker(context);
+
+                if (image != null) {
+                  pickedImage = image;
+                  print(image.path);
+                }
+              },
+              label: Text("Pick Image"),
+            ),
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: state.isLoading
@@ -129,6 +146,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
                               title: titleController.text,
                               description: descriptionController.text,
                               price: double.parse(priceController.text.trim()),
+                              serviceImage: pickedImage!,
                             ),
                           );
                     },

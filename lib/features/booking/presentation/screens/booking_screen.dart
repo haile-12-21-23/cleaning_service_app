@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/features/booking/presentation/providers/booking_provider.dart';
+import 'package:cleaning_service_app/features/booking/presentation/widgets/booking_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,22 +23,35 @@ class BookingScreen extends ConsumerWidget {
           return ListView.separated(
             itemBuilder: (context, index) {
               final booking = bookings[index];
-              return Card(
-                elevation: 3,
-                child: ListTile(
-                  title: Text(booking.service.title),
-                  subtitle: Text(booking.service.description),
-                  trailing: Text(
-                    booking.status,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.secondary,
-                    ),
-                  ),
-                  onTap: () {
-                    context.push("/booking-details", extra: booking);
-                  },
-                ),
-              );
+              return BookingCard(booking: booking);
+              // Expanded(
+              //   child: Card(
+              //     elevation: 3,
+              //     child: Row(
+              //       children: [
+              //         CachedNetworkImage(
+              //           imageUrl: booking.service.serviceImage,
+              //           width: 100,
+              //           height: 100,
+              //           fit: BoxFit.cover,
+              //         ),
+              //         ListTile(
+              //           title: Text(booking.service.title),
+              //           subtitle: Text(booking.service.description),
+              //           trailing: Text(
+              //             booking.status,
+              //             style: theme.textTheme.bodyMedium?.copyWith(
+              //               color: theme.colorScheme.secondary,
+              //             ),
+              //           ),
+              //           onTap: () {
+              //             context.push("/booking-details", extra: booking);
+              //           },
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // );
             },
             separatorBuilder: (context, _) => const SizedBox(height: 8),
             itemCount: bookings.length,

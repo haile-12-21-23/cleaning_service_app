@@ -31,7 +31,7 @@ final dioProvider = Provider<Dio>((ref) {
 
         final data = e.response?.data;
 
-        print('Error:${e.response}');
+        print('Error on dio:${e.response}');
 
         if (data != null) {
           if (data is Map<String, dynamic>) {

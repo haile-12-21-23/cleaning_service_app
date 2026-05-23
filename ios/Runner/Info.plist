@@ -43,6 +43,11 @@
 					<string>FlutterSceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>Main</string>
+<key>NSCameraUsageDescription</key>
+<string>We need camera access to take photos</string>
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>We need gallery access to select photos</string>
 				</dict>
 			</array>
 		</dict>
