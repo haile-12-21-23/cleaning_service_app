@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/constants/app_endpoints.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,7 +49,7 @@ final dioProvider = Provider<Dio>((ref) {
 
             /// CALL REFRESH API
             final refreshResponse = await dio.post(
-              "auth/refresh-token",
+              AppEndpoints.refresh,
               data: {"refresh_token": refreshToken},
             );
 

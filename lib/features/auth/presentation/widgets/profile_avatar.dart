@@ -46,7 +46,7 @@ class ProfileAvatar extends StatelessWidget {
             child: GestureDetector(
               onTap: onEdit,
               child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primary,
                   shape: BoxShape.circle,

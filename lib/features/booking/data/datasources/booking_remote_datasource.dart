@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/constants/app_endpoints.dart';
 import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/booking/data/models/booking_model.dart';
 import 'package:cleaning_service_app/features/booking/data/models/create_booking_request.dart';
@@ -10,7 +11,7 @@ class BookingRemoteDatasource {
 
   Future<void> createBooking(CreateBookingRequest request) async {
     try {
-      await dio.post('/bookings/createBooking', data: request.toJson());
+      await dio.post(AppEndpoints.createBooking, data: request.toJson());
     } on DioException catch (e) {
       // Backend response exists
       if (e.response != null) {
@@ -33,7 +34,7 @@ class BookingRemoteDatasource {
   Future<List<BookingModel>> getMyBookings({int limit = 10}) async {
     try {
       final response = await dio.get(
-        "/bookings/getUserBooking",
+        AppEndpoints.userBooking,
       ); //path will change to bookings/me
       if (response.statusCode == 200) {
         final bookingData = response.data as List;
@@ -42,6 +43,8 @@ class BookingRemoteDatasource {
             .map((booking) => BookingModel.fromJson(booking))
             .toList();
       }
+      print("response.data");
+      print(response.data["detail"]);
       throw AppException(response.data["detail"] ?? "Failed to load booking.");
     } on DioException catch (e) {
       // Backend response exists

@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/constants/app_endpoints.dart';
 import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/services/data/models/create_service_request.dart';
 import 'package:cleaning_service_app/features/services/data/models/service_model.dart';
@@ -10,7 +11,7 @@ class ServiceRemoteDatasource {
 
   Future<List<ServiceModel>> getServices({int limit = 10}) async {
     try {
-      final response = await dio.get("/services/readAllServices?limit=$limit");
+      final response = await dio.get("${AppEndpoints.allService}?limit=$limit");
       if (response.statusCode == 200) {
         final serviceData = response.data as List;
         return serviceData
@@ -26,7 +27,7 @@ class ServiceRemoteDatasource {
 
   Future<ServiceModel> getServiceById(String id) async {
     try {
-      final response = await dio.get("/services/readOneService/$id");
+      final response = await dio.get("${AppEndpoints.singleService}/$id");
       if (response.statusCode == 200) {
         return ServiceModel.fromJson(response.data);
       }
@@ -65,7 +66,7 @@ class ServiceRemoteDatasource {
       });
       print("formData:${formData.fields}");
 
-      await dio.post("/services/createService", data: formData);
+      await dio.post(AppEndpoints.createService, data: formData);
     } on DioException catch (e) {
       // Backend response exists
       if (e.response != null) {

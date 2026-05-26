@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/constants/app_endpoints.dart';
 import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/profile/data/models/user_model.dart';
 import 'package:dio/dio.dart';
@@ -9,7 +10,7 @@ class ProfileRemoteDatasource {
 
   Future<UserModel> getMe() async {
     try {
-      final response = await dio.get(("/users/me"));
+      final response = await dio.get(AppEndpoints.myProfile);
 
       if (response.statusCode == 200) {
         return UserModel.fromJson(response.data);

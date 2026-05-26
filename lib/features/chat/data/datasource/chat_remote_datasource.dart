@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/constants/app_endpoints.dart';
 import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/chat/data/models/conversation_model.dart';
 import 'package:cleaning_service_app/features/chat/data/models/message_model.dart';
@@ -9,7 +10,7 @@ class ChatRemoteDatasource {
 
   Future<List<ConversationModel>> getConversations(String userId) async {
     try {
-      final response = await dio.get('/conversation/my/$userId');
+      final response = await dio.get('${AppEndpoints.myConversation}/$userId');
       print("chatData:${response.data}");
 
       if (response.statusCode == 200) {
@@ -43,7 +44,7 @@ class ChatRemoteDatasource {
 
   Future<List<MessageModel>> getMessages(String userId) async {
     try {
-      final response = await dio.get('/message/$userId');
+      final response = await dio.get('${AppEndpoints.userMessages}/$userId');
       print("messageData:${response.data}");
 
       if (response.statusCode == 200) {

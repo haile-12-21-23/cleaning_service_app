@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/constants/app_endpoints.dart';
 import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/auth/data/models/login_request.dart';
 import 'package:cleaning_service_app/features/auth/data/models/register_request.dart';
@@ -11,7 +12,10 @@ class AuthRemoteDatasource {
 
   Future<TokenResponse> login(LoginRequest request) async {
     try {
-      final response = await dio.post('/auth/login', data: request.toJson());
+      final response = await dio.post(
+        AppEndpoints.login,
+        data: request.toJson(),
+      );
    
 
       // Success
@@ -54,7 +58,7 @@ class AuthRemoteDatasource {
           filename: request.profile.path.split('/').last,
         ),
       });
-      final response = await dio.post('auth/register', data: formData);
+      final response = await dio.post(AppEndpoints.register, data: formData);
       if (response.statusCode == 201) {
     return TokenResponse.fromJson(response.data);
 
