@@ -1,4 +1,4 @@
-import 'package:cleaning_service_app/core/errors/app_excetion.dart';
+import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/auth/data/models/login_request.dart';
 import 'package:cleaning_service_app/features/auth/data/models/register_request.dart';
 import 'package:cleaning_service_app/features/auth/data/models/token_response.dart';
@@ -42,7 +42,19 @@ class AuthRemoteDatasource {
   Future<TokenResponse> register(RegisterRequest request) async {
     try {
       
-      final response = await dio.post('auth/register', data: request.toJson());
+
+      final formData = FormData.fromMap({
+        "name": request.name,
+        "phone": request.phone,
+        "password": request.password,
+        "role": request.role,
+
+        "file": await MultipartFile.fromFile(
+          request.profile.path,
+          filename: request.profile.path.split('/').last,
+        ),
+      });
+      final response = await dio.post('auth/register', data: formData);
       if (response.statusCode == 201) {
     return TokenResponse.fromJson(response.data);
 

@@ -27,6 +27,9 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
 
   final formKey = GlobalKey<FormState>();
   String category = "Home";
+  final titleFocus = FocusNode();
+  final descriptionFocus = FocusNode();
+  final priceFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +63,8 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
               label: "Title",
               obSecureText: false,
               keyboardType: TextInputType.text,
+              focusNode: titleFocus,
+              nextFocusNode: descriptionFocus,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Title is required.";
@@ -76,7 +81,9 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
               label: "Description",
               maxLines: 5,
               obSecureText: false,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.multiline,
+              focusNode: descriptionFocus,
+              nextFocusNode: priceFocus,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Description is required.";
@@ -93,6 +100,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
               label: "price",
               obSecureText: false,
               keyboardType: TextInputType.number,
+              focusNode: priceFocus,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Price is required.";

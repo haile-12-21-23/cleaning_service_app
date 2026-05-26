@@ -1,7 +1,9 @@
+import 'dart:io';
+
 class RegisterRequest {
   final String name;
   final String role;
-  final String profile;
+  final File profile; //passwordController.text.trim()
   final String phone;
   final String password;
 

@@ -1,4 +1,4 @@
-import 'package:cleaning_service_app/core/errors/app_excetion.dart';
+import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/chat/data/models/conversation_model.dart';
 import 'package:cleaning_service_app/features/chat/data/models/message_model.dart';
 import 'package:dio/dio.dart';

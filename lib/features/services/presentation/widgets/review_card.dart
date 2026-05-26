@@ -26,6 +26,7 @@ class ReviewCard extends ConsumerStatefulWidget {
 
 class _ReviewCardState extends ConsumerState<ReviewCard> {
   final ExpansibleController _controller = ExpansibleController();
+  final reviewFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +77,10 @@ class _ReviewCardState extends ConsumerState<ReviewCard> {
             controller: widget.reviewController,
             label: '',
             obSecureText: false,
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.multiline,
+            // focusNode: ,
             maxLines: 5,
+         
           ),
         ),
 

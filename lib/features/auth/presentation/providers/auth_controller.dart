@@ -40,7 +40,7 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   Future<void> checkAuth() async {
-    final token = await local.readToken();
+    final token = await local.readAccessToken();
     
     print("TOKEN FROM STORAGE: '$token'");
     final loggedIn = token != null && token.isNotEmpty;
@@ -59,9 +59,12 @@ class AuthController extends StateNotifier<AuthState> {
       );
 print("TOKEN:");
       print(response.accessToken);
-      await local.saveToken(response.accessToken);
+      await local.saveAccessToken(response.accessToken);
+      await local.saveAccessToken(response.refreshToken);
 
 
+print("Saved Access token:${await local.readAccessToken()}");
+      print("Saved Refresh token:${await local.readRefreshToken()}");
       state = state.copyWith(
         isAuthenticated: true,
         isLoading: false,
@@ -72,26 +75,22 @@ print("TOKEN:");
     }
   }
   Future<void> register(
-    String name,
-    String role,
-    String profile,
-    String phone,
-    String password,
+  RegisterRequest request
   ) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
 
       final response = await repository.register(
         RegisterRequest(
-          name: name,
-          role: role,
-          profile: profile,
-          phone: phone,
-          password: password,
+          name: request.name,
+          role: request.role,
+          profile: request.profile,
+          phone: request.phone,
+          password: request.password,
         ),
       );
 
-      await local.saveToken(response.accessToken);
+      await local.saveAccessToken(response.accessToken);
 
       state = state.copyWith(
         isAuthenticated: true,

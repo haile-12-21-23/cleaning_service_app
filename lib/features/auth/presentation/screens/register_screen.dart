@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:cleaning_service_app/core/utils/app_image_picker.dart';
+import 'package:cleaning_service_app/core/utils/validators.dart';
 import 'package:cleaning_service_app/core/widgets/app_dropdown.dart';
 import 'package:cleaning_service_app/core/widgets/app_text_field.dart';
+import 'package:cleaning_service_app/features/auth/data/models/register_request.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_controller.dart';
 import 'package:cleaning_service_app/features/auth/presentation/providers/auth_state.dart';
 import 'package:cleaning_service_app/features/auth/presentation/widgets/profile_avatar.dart';
@@ -21,7 +26,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final phoneNumberController = TextEditingController();
   final nameController = TextEditingController();
   final passwordController = TextEditingController();
+  final nameFocus = FocusNode();
+  final phoneFocus = FocusNode();
+  final passwordFocus = FocusNode();
   String? selectedRole;
+  File? pickedImage;
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +60,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 const SizedBox(height: 30),
 
                 ProfileAvatar(
-                  onEdit: () {
+                  onEdit: () async {
+                    final image = await ImagePickerUtil.showImagePicker(
+                      context,
+                    );
+                    if (image != null) {
+                      pickedImage = image;
+                      print(image.path);
+                    }
                     print("Edit profile clicked");
                   },
                 ),
@@ -81,6 +98,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   label: " Full Name",
                   obSecureText: false,
                   keyboardType: TextInputType.name,
+                  focusNode: nameFocus,
+                  nextFocusNode: phoneFocus,
 
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -104,15 +123,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   label: "Phone Number",
                   obSecureText: false,
                   keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Phone number is required.";
-                    }
-                    if (value.trim().length < 9 || value.trim().length > 12) {
-                      return "Phone number must be between 9 and 12 digits";
-                    }
-                    return null;
-                  },
+                  focusNode: phoneFocus,
+                  nextFocusNode: passwordFocus,
+                  validator: (value) => AppValidators.phoneValidator(value),
+                  // {
+                  //   if (value == null || value.isEmpty) {
+                  //     return "Phone number is required.";
+                  //   }
+                  //   if (value.trim().length < 9 || value.trim().length > 12) {
+                  //     return "Phone number must be between 9 and 12 digits";
+                  //   }
+                  //   return null;
+                  // },
                   onChanged: (value) {
                     formKey.currentState?.validate();
                   },
@@ -124,6 +146,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   label: "Password",
                   obSecureText: true,
                   keyboardType: TextInputType.text,
+                  focusNode: passwordFocus,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Password is required.";
@@ -154,11 +177,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           await ref
                               .read(authControllerProvider.notifier)
                               .register(
-                                nameController.text.trim(),
-                                selectedRole ?? '',
-                                "default.png",
-                                phoneNumberController.text.trim(),
-                                passwordController.text.trim(),
+                                RegisterRequest(
+                                  phone: phoneNumberController.text.trim(),
+                                  password: passwordController.text.trim(),
+                                  name: nameController.text.trim(),
+                                  role: selectedRole ?? '',
+                                  profile: pickedImage!,
+                                )
+                            
                               );
                         },
                   child: authState.isLoading

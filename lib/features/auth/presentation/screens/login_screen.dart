@@ -1,3 +1,4 @@
+import 'package:cleaning_service_app/core/utils/validators.dart';
 import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/core/widgets/app_snackbar.dart';
 import 'package:cleaning_service_app/core/widgets/app_text_field.dart';
@@ -21,6 +22,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   final phoneNumberController = TextEditingController();
   final passwordController = TextEditingController();
+  final phoneFocus = FocusNode();
+  final passwordFocus = FocusNode();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -59,16 +62,11 @@ ref.listen<AuthState>(authControllerProvider, (previous, next) {
                   controller: phoneNumberController,
                   label: "Phone Number",
                   obSecureText: false,
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Phone number is required.";
-                    }
-                    if (value.trim().length < 9 || value.trim().length > 12) {
-                      return "Phone number must be between 9 and 12 digits";
-                    }
-                    return null;
-                  },
+                  keyboardType: TextInputType.number,
+                  focusNode: phoneFocus,
+                  nextFocusNode: passwordFocus,
+                  validator: (value) => AppValidators.phoneValidator(value),
+        
                   onChanged: (p0) {
                     formKey.currentState?.validate();
                   },
@@ -80,6 +78,7 @@ ref.listen<AuthState>(authControllerProvider, (previous, next) {
                   label: "Password",
                   obSecureText: true,
                   keyboardType: TextInputType.text,
+                  focusNode: passwordFocus,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Password is required.";

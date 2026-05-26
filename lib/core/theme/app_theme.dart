@@ -22,11 +22,17 @@ class AppTheme {
       fillColor: AppColors.surface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: AppColors.secondary, width: 1.5),
+        borderSide: BorderSide(
+          color: AppColors.secondary.withValues(alpha: 0.4),
+          width: 1.5,
+        ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: AppColors.secondary, width: 1.5),
+        borderSide: BorderSide(
+          color: AppColors.secondary.withValues(alpha: 0.4),
+          width: 1.5,
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),

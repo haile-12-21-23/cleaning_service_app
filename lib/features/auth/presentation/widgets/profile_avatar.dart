@@ -18,14 +18,16 @@ class ProfileAvatar extends StatelessWidget {
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: theme.colorScheme.primary, width: 3),
+              border: Border.all(color: theme.colorScheme.primary, width: 1),
             ),
             child: CircleAvatar(
-              radius: 55,
-              // backgroundColor: Colors.grey.shade200,
+              radius: 50,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(55),
+                borderRadius: BorderRadius.circular(50),
                 child: CachedNetworkImage(
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.cover,
                   imageUrl: user?.profile ?? '',
                   errorWidget: (context, url, error) {
                     return Text(

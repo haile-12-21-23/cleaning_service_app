@@ -1,4 +1,4 @@
-import 'package:cleaning_service_app/core/errors/app_excetion.dart';
+import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/services/data/models/create_service_request.dart';
 import 'package:cleaning_service_app/features/services/data/models/service_model.dart';
 import 'package:dio/dio.dart';
