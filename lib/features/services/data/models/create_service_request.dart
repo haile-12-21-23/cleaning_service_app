@@ -1,10 +1,9 @@
-import 'dart:io';
 
 class CreateServiceRequest {
   final String title;
   final String description;
   final double price;
-  final File serviceImage;
+  final String serviceImage;
 
   CreateServiceRequest({
     required this.title,

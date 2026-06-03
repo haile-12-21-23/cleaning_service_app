@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cleaning_service_app/core/networks/dio_provider.dart';
 import 'package:cleaning_service_app/features/services/data/datasources/service_remote_datasource.dart';
 import 'package:cleaning_service_app/features/services/data/models/create_service_request.dart';
@@ -47,6 +49,18 @@ class CreateServiceController extends StateNotifier<AsyncValue<void>> {
       state = AsyncError(e, st);
     }
   }
+
+  // Future<String> uploadServiceImage(File request) async {
+  //   try {
+  //     state = AsyncLoading();
+  //     final imageUrl = await repository.uploadServiceImage(request);
+  //     state = AsyncData(null);
+  //     return imageUrl;
+  //   } catch (e, st) {
+  //     state = AsyncError(e, st);
+  //     rethrow;
+  //   }
+  // }
 }
 
 // Create Service provider
@@ -54,4 +68,29 @@ class CreateServiceController extends StateNotifier<AsyncValue<void>> {
 final createServiceProvider =
     StateNotifierProvider<CreateServiceController, AsyncValue<void>>((ref) {
       return CreateServiceController(ref.read(serviceRepositoryProvider));
+    });
+class UploadServiceImageController extends StateNotifier<AsyncValue<void>> {
+  final ServiceRepositoryImpl repository;
+  UploadServiceImageController(this.repository) : super(const AsyncData(null));
+
+  Future<String> uploadServiceImage(File request) async {
+    try {
+      state = AsyncLoading();
+      final imageUrl = await repository.uploadServiceImage(request);
+      state = AsyncData(null);
+      return imageUrl;
+    } catch (e, st) {
+      state = AsyncError(e, st);
+      rethrow;
+    }
+  }
+}
+
+// Create Service provider
+
+final uploadImageServiceProvider =
+    StateNotifierProvider<UploadServiceImageController, AsyncValue<void>>((
+      ref,
+    ) {
+      return UploadServiceImageController(ref.read(serviceRepositoryProvider));
     });

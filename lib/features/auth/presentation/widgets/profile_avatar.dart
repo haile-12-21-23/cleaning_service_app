@@ -1,12 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cleaning_service_app/features/profile/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class ProfileAvatar extends StatelessWidget {
-  final UserModel? user;
+  final String? userProfile;
+  final String? name;
   final VoidCallback onEdit;
 
-  const ProfileAvatar({super.key, this.user, required this.onEdit});
+  const ProfileAvatar({
+    super.key,
+    this.userProfile,
+    this.name,
+    required this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +33,10 @@ class ProfileAvatar extends StatelessWidget {
                   height: 100,
                   width: 100,
                   fit: BoxFit.cover,
-                  imageUrl: user?.profile ?? '',
+                  imageUrl: userProfile ?? '',
                   errorWidget: (context, url, error) {
                     return Text(
-                      user?.name[0].toUpperCase() ?? '',
+                      name?.substring(0, 1).toUpperCase() ?? '',
                       style: TextStyle(fontSize: 48),
                     );
                   },

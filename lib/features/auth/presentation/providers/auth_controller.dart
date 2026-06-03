@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cleaning_service_app/core/networks/dio_provider.dart';
 import 'package:cleaning_service_app/core/providers.dart';
 import 'package:cleaning_service_app/core/storage/auth_local_data_source.dart';
@@ -123,6 +125,26 @@ print("Saved Access token:${await local.readAccessToken()}");
   
   }
 }
+class UploadProfileController extends StateNotifier<AsyncValue<String>> {
+  final AuthRepositoryImpl repository;
+
+  UploadProfileController(this.repository) : super(const AsyncData(''));
+
+  Future<String> uploadProfile(File request) async {
+    try {
+      state = const AsyncLoading();
+      final response = await repository.uploadProfile(request);
+
+state= AsyncData(response);
+      return response;
+    } catch (e) {
+      state = AsyncError(e, StackTrace.current);
+      rethrow;
+    }
+  }
+
+  
+}
 
 /// PROVIDER
 final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
@@ -130,6 +152,14 @@ final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
     return AuthController(
       ref.read(authRepositoryProvider),
       ref.read(authLocalDataSourceProvider),
+    );
+  },
+);
+/// PROVIDER
+final uploadProfileControllerProvider = StateNotifierProvider<UploadProfileController, AsyncValue<String>>(
+  (ref) {
+    return UploadProfileController(
+      ref.read(authRepositoryProvider),
     );
   },
 );

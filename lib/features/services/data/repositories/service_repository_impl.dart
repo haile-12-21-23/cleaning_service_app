@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cleaning_service_app/features/services/data/datasources/service_remote_datasource.dart';
 import 'package:cleaning_service_app/features/services/data/models/create_service_request.dart';
 import 'package:cleaning_service_app/features/services/data/models/service_model.dart';
@@ -7,7 +9,7 @@ class ServiceRepositoryImpl {
 
   ServiceRepositoryImpl(this.remote);
 
-  Future<List<ServiceModel>> getServices({int limit = 10}) async {
+  Future<List<ServiceModel>> getServices({int limit = 50}) async {
     return await remote.getServices(limit: limit);
 
   }
@@ -18,5 +20,8 @@ class ServiceRepositoryImpl {
 
   Future<void> createService(CreateServiceRequest request) async {
     return await remote.createService(request);
+  }
+  Future<String> uploadServiceImage(File request) async {
+    return await remote.uploadServiceImage(request);
   }
 }

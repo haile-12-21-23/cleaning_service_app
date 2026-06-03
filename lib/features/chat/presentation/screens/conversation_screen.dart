@@ -22,7 +22,7 @@ class _ChatScreenState extends ConsumerState<ConversationScreen> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      final user = ref.read(myProfileProvider);
+      final user = await ref.read(myProfileProvider);
       user.whenOrNull(
         data: (data) {
           currentUser = data;
@@ -36,6 +36,7 @@ class _ChatScreenState extends ConsumerState<ConversationScreen> {
     final theme = Theme.of(context);
     print("Current User: ${currentUser?.name}");
     print("Current User ID: ${currentUser?.id}");
+
     final conversationAsync = ref.watch(
       conversationProvider(currentUser?.id.trim() ?? ''),
     );

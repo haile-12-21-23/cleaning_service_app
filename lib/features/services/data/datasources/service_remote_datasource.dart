@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cleaning_service_app/core/constants/app_endpoints.dart';
 import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/services/data/models/create_service_request.dart';
@@ -51,22 +53,46 @@ class ServiceRemoteDatasource {
     }
   }
 
-  Future<void> createService(CreateServiceRequest request) async {
+  Future<String> uploadServiceImage(File requestImage) async {
     try {
-      print("request:${request.toJson()}");
+      // print("request:${request.toJson()}");
       final formData = FormData.fromMap({
-        "title": request.title,
-        "description": request.description,
-        "price": request.price,
-
         "file": await MultipartFile.fromFile(
-          request.serviceImage.path,
-          filename: request.serviceImage.path.split('/').last,
+          requestImage.path,
+          filename: requestImage.path.split('/').last,
         ),
       });
       print("formData:${formData.fields}");
 
-      await dio.post(AppEndpoints.createService, data: formData);
+      final response = await dio.post(
+        AppEndpoints.uploadServiceImage,
+        data: formData,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      // Backend response exists
+      if (e.response != null) {
+        final data = e.response?.data;
+
+        if (data is Map<String, dynamic>) {
+          throw AppException(
+            data["detail"] ?? data["message"] ?? "Something went wrong",
+          );
+        }
+      }
+
+      // Network errors
+      throw AppException("Unable to connect to server");
+    } catch (e, st) {
+      print("stacktrace:$st");
+      print("error:$e");
+      throw AppException(e.toString());
+    }
+  }
+
+  Future<void> createService(CreateServiceRequest request) async {
+    try {
+      await dio.post(AppEndpoints.createService, data: request.toJson());
     } on DioException catch (e) {
       // Backend response exists
       if (e.response != null) {

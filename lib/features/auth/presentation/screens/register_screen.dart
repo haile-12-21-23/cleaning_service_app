@@ -20,7 +20,6 @@ class RegisterScreen extends ConsumerStatefulWidget {
 }
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
-
   final formKey = GlobalKey<FormState>();
 
   final phoneNumberController = TextEditingController();
@@ -31,7 +30,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final passwordFocus = FocusNode();
   String? selectedRole;
   File? pickedImage;
-
+  String? uploadedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +58,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
                 const SizedBox(height: 30),
 
-                ProfileAvatar(
-                  onEdit: () async {
-                    final image = await ImagePickerUtil.showImagePicker(
-                      context,
+                Consumer(
+                  builder: (_, WidgetRef ref, _) {
+                    return ProfileAvatar(
+                      onEdit: () async {
+                        final image = await ImagePickerUtil.showImagePicker(
+                          context,
+                        );
+                        if (image != null) {
+                          pickedImage = image;
+uploadedImage = await ref
+                              .read(uploadProfileControllerProvider.notifier)
+                              .uploadProfile(image);
+
+                          print(image.path);
+                          print(uploadedImage);
+                          setState(() {});
+                        }
+                        print("Edit profile clicked");
+                      },
+                      userProfile: uploadedImage,
                     );
-                    if (image != null) {
-                      pickedImage = image;
-                      print(image.path);
-                    }
-                    print("Edit profile clicked");
                   },
                 ),
                 const SizedBox(height: 30),
@@ -92,7 +102,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-            
+
                 AppTextField(
                   controller: nameController,
                   label: " Full Name",
@@ -114,10 +124,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     formKey.currentState?.validate();
                   },
                 ),
-              
+
                 const SizedBox(height: 16),
-            
-              
+
                 AppTextField(
                   controller: phoneNumberController,
                   label: "Phone Number",
@@ -140,7 +149,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-            
+
                 AppTextField(
                   controller: passwordController,
                   label: "Password",
@@ -160,7 +169,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     formKey.currentState?.validate();
                   },
                 ),
-               
+
                 if (authState.error != null)
                   Text(
                     authState.error!,
@@ -182,9 +191,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                   password: passwordController.text.trim(),
                                   name: nameController.text.trim(),
                                   role: selectedRole ?? '',
-                                  profile: pickedImage!,
-                                )
-                            
+                                  profile: uploadedImage!,
+                                ),
                               );
                         },
                   child: authState.isLoading

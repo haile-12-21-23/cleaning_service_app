@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cleaning_service_app/core/constants/app_endpoints.dart';
 import 'package:cleaning_service_app/core/errors/app_exception.dart';
 import 'package:cleaning_service_app/features/auth/data/models/login_request.dart';
@@ -47,23 +49,50 @@ class AuthRemoteDatasource {
     try {
       
 
-      final formData = FormData.fromMap({
-        "name": request.name,
-        "phone": request.phone,
-        "password": request.password,
-        "role": request.role,
+      
+      final response = await dio.post(
+        AppEndpoints.register,
+        data: request.toJson(),
+      );
+      if (response.statusCode == 201) {
+        return TokenResponse.fromJson(response.data);
+      }
+      throw AppException(response.data["detail"] ?? "Register failed");
+    } on DioException catch (e) {
+      // Backend response exists
+      if (e.response != null) {
+        final data = e.response?.data;
 
+        if (data is Map<String, dynamic>) {
+          throw AppException(
+            data["detail"] ?? data["message"] ?? "Something went wrong",
+          );
+        }
+      }
+
+      // Network errors
+      throw AppException("Unable to connect to server");
+    } catch (e) {
+      throw AppException(e.toString());
+    }
+  }
+
+  Future<String> uploadProfile(File request) async {
+    try {
+      final formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(
-          request.profile.path,
-          filename: request.profile.path.split('/').last,
+          request.path,
+          filename: request.path.split('/').last,
         ),
       });
-      final response = await dio.post(AppEndpoints.register, data: formData);
-      if (response.statusCode == 201) {
-    return TokenResponse.fromJson(response.data);
-
+      final response = await dio.post(
+        AppEndpoints.uploadProfileImage,
+        data: formData,
+      );
+      if (response.statusCode == 200) {
+        return response.data;
       }
-      throw AppException(response.data["detail"] ?? "Login failed");
+      throw AppException(response.data["detail"] ?? "upload failed");
     } on DioException catch (e) {
       // Backend response exists
       if (e.response != null) {

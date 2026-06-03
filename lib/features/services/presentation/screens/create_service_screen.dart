@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cleaning_service_app/core/utils/app_image_picker.dart';
 import 'package:cleaning_service_app/core/widgets/app_app_bar.dart';
 import 'package:cleaning_service_app/core/widgets/app_dropdown.dart';
@@ -24,6 +25,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
   final descriptionController = TextEditingController();
   final priceController = TextEditingController();
   File? pickedImage;
+  String? uploadedImage;
 
   final formKey = GlobalKey<FormState>();
   String category = "Home";
@@ -33,7 +35,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     final state = ref.watch(createServiceProvider);
     ref.listen(createServiceProvider, (prev, next) {
@@ -44,7 +46,6 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
             isSuccess: true,
           );
           context.pop();
-
         },
         error: (e, _) {
           showCustomSnackBar(message: e.toString(), isSuccess: false);
@@ -70,7 +71,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
                   return "Title is required.";
                 }
                 if (value.length < 10) {
-                  return "Title is too short.";
+                  return "Title is too short. It should be at least 10 characters.";
                 }
                 return null;
               },
@@ -89,7 +90,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
                   return "Description is required.";
                 }
                 if (value.length < 20) {
-                  return "Description is too short.";
+                  return "Description is too short. it should be at least 20 characters.";
                 }
                 return null;
               },
@@ -128,23 +129,68 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
               },
             ),
             const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () async {
-                final image = await ImagePickerUtil.showImagePicker(context);
-
-                if (image != null) {
-                  pickedImage = image;
-                  print(image.path);
-                }
-              },
-              label: Text("Pick Image"),
+            Text(
+              "Service Image",
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
             ),
+            const SizedBox(height: 8),
+            Consumer(
+              builder: (_, WidgetRef ref, _) {
+                return GestureDetector(
+                  onTap: () async {
+                    final image = await ImagePickerUtil.showImagePicker(
+                      context,
+                    );
+
+                    if (image != null) {
+                      pickedImage = image;
+
+                      uploadedImage = await ref
+                          .read(uploadImageServiceProvider.notifier)
+                          .uploadServiceImage(image);
+
+                      setState(() {});
+                    }
+                  },
+                  child: Container(
+                    height: 220,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: theme.colorScheme.primaryContainer,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(14),
+                      child: CachedNetworkImage(
+                        imageUrl: uploadedImage ?? '',
+                        fit: BoxFit.cover,
+                        errorWidget: (_, _, _) =>
+                            const Icon(Icons.cleaning_services, size: 80),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            if (uploadedImage == null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  "Please upload service image.",
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.error,
+                  ),
+                ),
+              ),
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: state.isLoading
                   ? null
                   : () async {
-                      if (!formKey.currentState!.validate()) {
+                      if (!formKey.currentState!.validate() ||
+                          uploadedImage == null) {
                         return;
                       }
                       await ref
@@ -154,7 +200,7 @@ class _CreateServiceScreenState extends ConsumerState<CreateServiceScreen> {
                               title: titleController.text,
                               description: descriptionController.text,
                               price: double.parse(priceController.text.trim()),
-                              serviceImage: pickedImage!,
+                              serviceImage: uploadedImage!,
                             ),
                           );
                     },

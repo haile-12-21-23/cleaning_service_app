@@ -23,7 +23,11 @@ class ProfileScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                ProfileAvatar(user: profile, onEdit: () {}),
+                ProfileAvatar(
+                  userProfile: profile.profile,
+                  name: profile.name,
+                  onEdit: () {},
+                ),
                 const SizedBox(height: 16),
                 Text(profile.name, style: theme.textTheme.headlineSmall),
                 const SizedBox(height: 8),

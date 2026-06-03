@@ -18,6 +18,7 @@ class AppEndpoints {
   static const String singleService = "services/single-service";
   static const String updateService = "services/update-service";
   static const String deleteService = "services/delete-service";
+  
 
   // Booking
   static const String createBooking = "bookings/create-booking";
@@ -43,4 +44,10 @@ class AppEndpoints {
   static const String reviewProvider = "reviews/review-provider/provider";
   static const String clientReviews = "reviews/client-review/client";
   static const String providerReviews = "reviews/provider-review/provider";
+
+
+  // File Upload
+  static const String uploadServiceImage = "file/upload-service-image";
+  static const String uploadProfileImage = "file/upload-profile-picture";
+  
 }

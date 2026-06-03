@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cleaning_service_app/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:cleaning_service_app/features/auth/data/models/login_request.dart';
 import 'package:cleaning_service_app/features/auth/data/models/register_request.dart';
@@ -16,5 +18,8 @@ class AuthRepositoryImpl {
   }
   Future<TokenResponse> register(RegisterRequest request) {
     return remote.register(request);
+  }
+  Future<String> uploadProfile(File request) {
+    return remote.uploadProfile(request);
   }
 }
